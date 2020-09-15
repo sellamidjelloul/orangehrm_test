@@ -3,13 +3,13 @@ echo use_stylesheet(plugin_web_path('orangehrmCorePlugin', 'css/mainMenuComponen
 echo use_javascript(plugin_web_path('orangehrmCorePlugin', 'js/mainMenuComponent.js'));
 
 function getSubMenuIndication($menuItem) {
-    
+
     if (count($menuItem['subMenuItems']) > 0) {
         return ' class="arrow"';
     } else {
         return '';
     }
-    
+
 }
 
 function getListItemClass($menuItem, $currentItemDetails, $additionalClasses = []) {
@@ -25,83 +25,81 @@ function getListItemClass($menuItem, $currentItemDetails, $additionalClasses = [
 }
 
 function getMenuUrl($menuItem) {
-    
+
     $url = '#';
-    
+
     if (!empty($menuItem['module']) && !empty($menuItem['action'])) {
         $url = url_for($menuItem['module'] . '/'. $menuItem['action']);
         $url = empty($menuItem['urlExtras'])?$url:$url . $menuItem['urlExtras'];
     }
-    
+
     return $url;
-    
+
 }
 
 function getHtmlId($menuItem) {
-    
+
     $id = '';
-    
+
     if (!empty($menuItem['action'])) {
         $id = 'menu_' . $menuItem['module'] . '_' . $menuItem['action'];
     } else {
-        
+
         $module             = '';
         $firstSubMenuItem   = $menuItem['subMenuItems'][0];
         $module             = $firstSubMenuItem['module'] . '_';
-        
+
         $id = 'menu_' . $module . str_replace(' ', '', $menuItem['menuTitle']);
-        
+
     }
-    
+
     return $id;
-    
+
 }
 
 ?>
 
-<div id="mainMenu" class="menu">
-    
-    <ul id="mainMenuFirstLevelUnorderedList" class="main-menu-first-level-unordered-list main-menu-first-level-unordered-list-width">
-        
-        <?php foreach ($menuItemArray as $firstLevelItem) : ?>
+<div>
 
-            <li<?php echo getListItemClass($firstLevelItem, $currentItemDetails, ['main-menu-first-level-list-item']); ?>><a href="<?php echo getMenuUrl($firstLevelItem); ?>" id="<?php echo getHtmlId($firstLevelItem); ?>" class="firstLevelMenu"><b><?php echo __($firstLevelItem['menuTitle']) ?></b></a>
+    <ul class="list-unstyled">
+        <?php foreach ($menuItemArray as $i => $firstLevelItem) : ?>
+        <?php if (count($firstLevelItem['subMenuItems']) > 0) : ?>
+                <li><a href="<?php echo "#firstLavel_" . $i; ?>" data-toggle="collapse"><?php echo __($firstLevelItem['menuTitle']) ?></a></li>
+            <?php else:?>
+                <li><a href="<?php echo getMenuUrl($firstLevelItem); ?>" ><?php echo __($firstLevelItem['menuTitle']); ?></a></li>
+        <?php endif; ?>
 
-            <ul>
-            <?php if (count($firstLevelItem['subMenuItems']) > 0) : ?>            
-                    
-                    <?php foreach ($firstLevelItem['subMenuItems'] as $secondLevelItem) : ?>
+        <ul id="<?php echo "firstLavel_" . $i; ?>" class="list-unstyled collapse">
+            <?php if (count($firstLevelItem['subMenuItems']) > 0) : ?>
 
-                    <li<?php echo getListItemClass($secondLevelItem, $currentItemDetails); ?>><a href="<?php echo getMenuUrl($secondLevelItem); ?>" id="<?php echo getHtmlId($secondLevelItem); ?>"<?php echo getSubMenuIndication($secondLevelItem); ?>><?php echo __($secondLevelItem['menuTitle']) ?></a>
+            <?php foreach ($firstLevelItem['subMenuItems'] as $j => $secondLevelItem) : ?>
 
                         <?php if (count($secondLevelItem['subMenuItems']) > 0) : ?>
-
-                            <ul>
+                        <li><a href="<?php echo "#secondLavel_" . $i . "_" . $j; ?>" data-toggle="collapse"><?php echo __($secondLevelItem['menuTitle']) ?></a>
+                            <ul id="<?php echo "secondLavel_" . $i . "_" . $j; ?>" class="list-unstyled collapse">
 
                                 <?php foreach ($secondLevelItem['subMenuItems'] as $thirdLevelItem) : ?>
 
-                                    <li><a href="<?php echo getMenuUrl($thirdLevelItem); ?>" id="<?php echo getHtmlId($thirdLevelItem); ?>"><?php echo __($thirdLevelItem['menuTitle']) ?></a></li>
+                                    <li><a href="<?php echo getMenuUrl($thirdLevelItem); ?>"><?php echo __($thirdLevelItem['menuTitle']) ?></a></li>
 
                                 <?php endforeach; ?>
 
                             </ul> <!-- third level -->
-
+                    <?php else:?>
+                        <li><a href="<?php echo getMenuUrl($secondLevelItem); ?>" ><?php echo __($secondLevelItem['menuTitle']) ?></a>
                         <?php endif; ?>
 
-                        </li>   
-                    
-                    <?php endforeach; ?>
-            <?php else: 
+                    </li>
+
+                <?php endforeach; ?>
+            <?php else:
                 // Empty li to add an orange bar and maintain uniform look.
-            ?>                        
-                        <li></li>
+                ?>
+                <li></li>
             <?php endif; ?>
-                
-                </ul> <!-- second level -->                        
-            </li>
-            
+
+        </ul> <!-- second level -->
         <?php endforeach; ?>
-            
-    </ul> <!-- first level -->
-    
+    </ul>
+
 </div> <!-- menu -->
