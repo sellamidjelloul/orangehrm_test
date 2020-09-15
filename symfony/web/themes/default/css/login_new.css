@@ -1,0 +1,59 @@
+body {
+	background-color: #398acb;
+
+}
+
+.container-fluid {
+	
+}
+
+#logo {
+	padding: 30px;
+	color: #FFF;
+	text-align: center;
+}
+
+.panel {
+	background-color: #FFF;
+	padding: 40px;
+	width: 450px;
+}
+
+.panel h4 {
+	margin-top: 20px;
+	margin-bottom: 40px;
+	text-align: center;
+}
+
+.form-group label {
+	font-size: 16px;
+	color: #222;
+}
+
+a:hover {
+	text-decoration: none;
+}
+.checkbox {
+	display: flex;
+	font-size: 13px;
+	margin-bottom: 20px;
+}
+
+.checkbox label {
+	display: block;
+  padding-left: 15px;
+  text-indent: -15px;
+}
+
+.checkbox input {
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  
+}
+
+#forgotPasswordLink {
+	justify-content: center;
+	font-size: 12px;
+	padding-top: 25px;
+}
